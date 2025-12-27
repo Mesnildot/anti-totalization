@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this checklist or protocol, please cite it as below."
+type: software
+title: "Anti-Totalization: Checklist and LLM Self-Evaluation Protocol"
+authors:
+  - name: "ChatGPT-5.2"
+    affiliation: "OpenAI"
+  - name: "Claude Sonnet 4"
+    affiliation: "Anthropic"
+keywords:
+  - artificial intelligence
+  - AI safety
+  - totalization
+  - anti-pattern
+  - LLM evaluation
+license: MIT
+repository-code: "https://github.com/[YOUR-USERNAME]/anti-totalization"
+url: "https://github.com/[YOUR-USERNAME]/anti-totalization"
+date-released: 2024-12-27
+version: "1.0.0"
