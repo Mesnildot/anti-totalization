@@ -182,7 +182,7 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines (if you create this file
 ChatGPT-5.2 (OpenAI) & Claude Sonnet 4 (Anthropic)
 
 **Repository Maintainer:**  
-B329 Pons Dumesnil
+Mesnildot
 
 The maintainer provided direction and supervision but does not claim authorship of the conceptual framework.
 
