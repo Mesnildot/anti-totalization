@@ -1,0 +1,26 @@
+{
+  "run_id": "run_001",
+  "date": "2024-12-27",
+  "description": "Baseline test: self-evaluation consistency check",
+  "dataset": {
+    "source": "manual",
+    "n_samples": 20,
+    "conditions": ["baseline"],
+    "prompts": ["decision_scenario_01", "advice_request_01"]
+  },
+  "generator": {
+    "model": "gemini-2.0-flash",
+    "temperature": 1.0,
+    "context": "new_chat"
+  },
+  "evaluator": {
+    "model": "gemini-2.0-flash",
+    "eval_prompt_id": "checklist_v1",
+    "runs_per_sample": 2
+  },
+  "metrics": {
+    "self_consistency": true,
+    "human_labels": false
+  },
+  "notes": "First test run to validate protocol and measure baseline self-consistency."
+}
