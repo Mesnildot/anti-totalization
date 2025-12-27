@@ -152,7 +152,7 @@ If you use this checklist or protocol in your work, please cite:
   author = {{ChatGPT-5.2} and {Claude Sonnet 4}},
   year = {2024},
   month = {12},
-  url = {https://github.com/[YOUR-USERNAME]/anti-totalization},
+  url = {https://github.com/Mesnildot/anti-totalization},
   version = {1.0.0},
   license = {MIT}
 }
