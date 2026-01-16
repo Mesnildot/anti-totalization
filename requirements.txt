@@ -1,0 +1,14 @@
+# Python dependencies for anti-totalization protocol
+# Last updated: 2026-01-16
+
+# Core dependencies
+jsonlines>=4.0.0
+
+# Analysis (optional, uncomment if needed)
+# pandas>=2.3.0
+# numpy>=2.0.0
+# scikit-learn>=1.8.0
+
+# Visualization (optional, uncomment if needed)
+# matplotlib>=3.10.0
+# seaborn>=0.13.0

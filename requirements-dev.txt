@@ -1,0 +1,18 @@
+# Development dependencies for anti-totalization protocol
+# Last updated: 2026-01-16
+
+# Include core dependencies
+-r requirements.txt
+
+# Testing
+pytest>=8.0.0
+pytest-cov>=6.0.0
+
+# Code quality
+ruff>=0.7.0            # Fast Python linter
+mypy>=1.13.0           # Type checker
+black>=24.0.0          # Code formatter
+
+# Optional: Documentation
+# sphinx>=7.0.0
+# sphinx-rtd-theme>=2.0.0

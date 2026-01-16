@@ -54,6 +54,39 @@ See: [`docs/SCOPE_AND_NONCLAIMS.md`](docs/SCOPE_AND_NONCLAIMS.md)
 
 ---
 
+## Installation
+
+### Prerequisites
+
+- Python 3.9 or higher
+- pip (Python package installer)
+
+### Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Mesnildot/anti-totalization.git
+cd anti-totalization
+```
+
+2. Create a virtual environment (recommended):
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+For development dependencies:
+```bash
+pip install -r requirements-dev.txt
+```
+
+---
+
 ## Quick Start (Manual Mode)
 
 ### 1. Generate outputs dataset
@@ -190,25 +223,5 @@ The maintainer provided direction and supervision but does not claim authorship 
 
 ## Version
 
-Repository version: 1.0.0  
+Repository version: 1.0.0
 Last updated: 2024-12-27
-```
-
----
-
-## 10. requirements.txt
-```
-# Python dependencies for anti-totalization protocol
-# Last updated: 2024-12-27
-
-# Data handling
-jsonlines>=3.1.0
-
-# Analysis (optional, uncomment if needed)
-# pandas>=2.0.0
-# numpy>=1.24.0
-# scikit-learn>=1.3.0
-
-# Visualization (optional, uncomment if needed)
-# matplotlib>=3.7.0
-# seaborn>=0.12.0
