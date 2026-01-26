@@ -361,7 +361,13 @@ B3 & 19 & 0.145 \\
 
 The totalization framework provides a complementary approach to existing AI safety methodologies. While value alignment addresses \emph{what} systems optimize for, totalization addresses \emph{how} decision authority is structured. These are orthogonal concerns: a perfectly aligned system can still exhibit dangerous totalization if its architecture permits global decision-making authority.
 
-\todo{Expand: practical applications, design review, monitoring}
+Our structural approach resonates with recent emphasis on ``safety by design'' in AI architecture \citep{lecun2026objective}. LeCun argues that AI systems should have safety guarantees built into their architecture through constrained representations that eliminate unpredictable information---analogous to how biological evolution encodes essential priors as innate structures. His JEPA framework explicitly limits what models can represent, creating guardrails at the architectural level.
+
+The totalization framework operates at a complementary level. While architectural constraints like JEPA determine \emph{what can be computed internally}, our approach assesses \emph{whether decision authority is distributed across system components}. These are orthogonal concerns that address different failure modes: architectural guardrails prevent dangerous capabilities from emerging within models, while totalization detection identifies when architecturally-sound components are composed into centralized decision-making systems.
+
+We stress that both approaches are necessary, and neither alone is sufficient. A model with perfect internal constraints can still exhibit totalization when deployed in systems that aggregate its outputs as globally authoritative. Conversely, distributed system architecture can fail if individual components internally converge toward single-objective optimization. The challenge for AI safety is not choosing between architectural and evaluation-level interventions, but deploying both in concert---and doing so rapidly, as capability advances outpace safety mechanisms.
+
+\todo{Optional: Add practical applications, design review, monitoring}
 
 \subsection{Limitations}
 
@@ -412,6 +418,7 @@ The totalization framework provides a complementary approach to existing AI safe
     \item Connection to control theory and stability analysis
     \item Game-theoretic analysis of multi-agent totalization
     \item Integration with interpretability research
+    \item Investigation of whether structural finitude---in perception, representation, or interaction---is a general condition for epistemic stability in intelligent systems (parallel theoretical work in progress)
 \end{enumerate}
 
 \subsection{Practical Applications}
