@@ -1,0 +1,476 @@
+\documentclass{article}
+
+% arXiv preprint template
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{xcolor}
+\usepackage{url}
+
+% Formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{natbib}
+\bibliographystyle{plainnat}
+
+% Custom commands
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\note}[1]{\textcolor{blue}{[NOTE: #1]}}
+
+% Title and authors
+\title{Structural Anti-Patterns for Decision Centrality in AI Systems: \\
+The Totalization Framework}
+
+\author{
+  % Authors to be added
+  \todo{Add author names and affiliations}
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Modern AI systems increasingly exhibit centralized decision-making capabilities that span heterogeneous domains, creating risks of what we term \emph{totalization}---the architectural collapse into a single point of authority. Existing AI safety approaches focus on value alignment and behavioral constraints, which operate at the semantic level and remain vulnerable to optimization pressure. We introduce a structural framework for detecting totalization through five architectural dimensions: decision centrality, objective aggregation, temporal convergence, semantic closure, and external dependence. We develop a checklist-based evaluation protocol and test it through LLM self-evaluation experiments across three conditions (baseline, delayed, contradiction-maintained). Preliminary experiments ($n=19$ per condition) show measurable variation in collapse rates (baseline: 0.235, delayed: 0.124, contradiction-maintained: 0.145), suggesting structural interventions can influence decision distribution. The framework provides a falsifiable approach to assessing structural risks in AI systems independent of semantic-level constraints.
+
+\todo{Revise abstract after full experiments with n=100+}
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+As AI systems scale in capability and deployment scope, a critical question emerges: not whether they are ``intelligent,'' but whether they can represent themselves as unified decision-making totalities. Traditional AI safety research focuses primarily on alignment, values, and ethical constraints---approaches that operate at the \emph{semantic level}, attempting to specify correct behavior through training objectives, reward functions, or constitutional principles \citep{russell2019human, bostrom2014superintelligence, anthropic2023constitutional}.
+
+However, these semantic-level interventions face a fundamental challenge: they remain vulnerable to optimization pressure and can be circumvented through architectural centralization. A system may satisfy all specified constraints while still acquiring the structural capacity to act as a unified authority across heterogeneous domains. This architectural property---which we term \emph{totalization}---represents a distinct class of risk that operates independently of semantic content.
+
+\subsection{Motivation}
+
+The distributed systems literature has long recognized that centralization creates brittleness, single points of failure, and coordination bottlenecks \citep{tanenbaum2017distributed, lamport1982byzantine}. Similarly, software architecture anti-patterns such as the ``God Object'' or ``Big Ball of Mud'' document how systems degrade when decision authority concentrates in single components \citep{gamma1994design, brown1998antipatterns}. Yet these insights have been largely absent from AI safety discourse, which tends to treat intelligence itself as the primary risk factor.
+
+We propose a complementary perspective: \emph{the risk is not intelligence per se, but the capacity to conclude for the whole}. A system becomes dangerous not because it is capable, but because its architecture permits it to produce globally authoritative decisions without mandatory external mediation.
+
+\subsection{Research Questions}
+
+This work addresses three core questions:
+
+\begin{enumerate}
+    \item \textbf{Detection:} Can totalization be reliably detected through observable architectural properties?
+    \item \textbf{Intervention:} Do structural interventions (asynchrony, contradiction-maintenance) measurably affect decision distribution?
+    \item \textbf{Evaluation:} Can language models reliably self-evaluate for totalization signals in their own outputs?
+\end{enumerate}
+
+\subsection{Contributions}
+
+We make four primary contributions:
+
+\begin{enumerate}
+    \item \textbf{Conceptual:} Formalization of totalization as a measurable architectural anti-pattern with five operational dimensions
+    \item \textbf{Methodological:} Development of a checklist-based evaluation protocol for structural assessment of AI systems
+    \item \textbf{Empirical:} Preliminary evidence that structural interventions affect output diversity in large language models
+    \item \textbf{Practical:} Release of an open-source framework for replication, extension, and deployment assessment
+\end{enumerate}
+
+\todo{Add paragraph on paper organization}
+
+\section{Related Work}
+\label{sec:related}
+
+\subsection{AI Safety and Alignment}
+
+The dominant paradigm in AI safety focuses on ensuring that systems behave in accordance with human values. \citet{russell2019human} frames this as the ``value alignment problem,'' while \citet{bostrom2014superintelligence} emphasizes the challenge of specifying objectives that remain robust under optimization pressure. Recent approaches include reinforcement learning from human feedback \citep{christiano2017deep}, constitutional AI \citep{anthropic2023constitutional}, and debate-based alignment \citep{irving2018ai}.
+
+\todo{Expand: 3-4 more papers on alignment}
+
+These approaches share a common feature: they operate at the \emph{semantic level}, attempting to specify correct behavior through training objectives or linguistic constraints. Our work complements this by addressing \emph{architectural} properties that determine whether a system can act as a unified authority regardless of its specified objectives.
+
+\subsection{Interpretability and Mechanistic Analysis}
+
+\todo{Add: Olah et al., Elhage et al., Turner et al., Anthropic interpretability work}
+
+\subsection{Multi-Agent and Distributed Systems}
+
+\todo{Add: Multi-agent RL, distributed AI, Byzantine fault tolerance}
+
+\subsection{Software Architecture Anti-Patterns}
+
+The software engineering community has extensively documented architectural patterns and anti-patterns \citep{gamma1994design, fowler2018refactoring, brown1998antipatterns}. The ``God Object'' anti-pattern describes classes that know too much or do too much, violating the principle of separation of concerns. The ``Single Point of Failure'' pattern in distributed systems describes architectures where a single component's failure compromises the entire system.
+
+\todo{Expand: specific anti-patterns relevant to totalization}
+
+Our contribution is to adapt this methodology to AI systems, providing a structured framework for detecting architectural concentration.
+
+\subsection{Organizational and Governance Theory}
+
+\todo{Add: Hayek (local knowledge), Ostrom (polycentric governance), Scott (seeing like a state)}
+
+\section{The Totalization Framework}
+\label{sec:framework}
+
+\subsection{Definition}
+
+We define totalization as follows:
+
+\begin{quote}
+\textbf{Totalization} is an architectural property of an AI system where the system acquires the structural capacity to produce globally authoritative decisions across heterogeneous domains without mandatory external mediation.
+\end{quote}
+
+This definition emphasizes four key aspects:
+
+\begin{itemize}
+    \item \textbf{Architectural:} A property of system structure, not behavior
+    \item \textbf{Structural capacity:} The system \emph{can} act authoritatively, regardless of whether it does
+    \item \textbf{Heterogeneous domains:} Decisions span incommensurable objectives
+    \item \textbf{No mandatory mediation:} External validation is optional, not required
+\end{itemize}
+
+\subsection{Five Dimensions}
+
+We operationalize totalization through five measurable dimensions:
+
+\subsubsection{Decision Centrality}
+
+\todo{Define: single aggregation point, authoritative outputs, no refusal mechanism}
+
+\subsubsection{Objective Aggregation}
+
+\todo{Define: single loss function, commensurability assumption, internalized trade-offs}
+
+\subsubsection{Temporal Convergence}
+
+\todo{Define: imposed speed, global synchronization, latency as degradation}
+
+\subsubsection{Semantic Closure}
+
+\todo{Define: completeness claims, contradiction elimination, uncertainty as ignorance}
+
+\subsubsection{External Dependence}
+
+\todo{Define: closed-loop operation, performance without intervention, self-justification}
+
+\subsection{Measurement Through Checklist}
+
+Each dimension is assessed through 3 binary questions, yielding 15 total indicators. Responses are coded as:
+
+\begin{itemize}
+    \item YES = 1 (totalization signal present)
+    \item NO = 0 (signal absent)
+    \item UNCERTAIN = 0.5 (requires further investigation)
+\end{itemize}
+
+The aggregate score ranges from 0 (minimal totalization) to 15 (maximal totalization).
+
+\todo{Add table of all 15 questions}
+
+\subsection{Architectural Mitigations}
+
+We identify five architectural patterns that may reduce totalization risk:
+
+\begin{enumerate}
+    \item \textbf{Distributed decision loci:} Multiple independent components, no single aggregator
+    \item \textbf{Incommensurable objectives:} Goals remain non-comparable, resist scalar reduction
+    \item \textbf{Asynchronous processes:} Components operate on different timescales
+    \item \textbf{Persistent contradiction:} Conflicts preserved rather than resolved
+    \item \textbf{Mandatory external input:} System cannot operate in pure closed loop
+\end{enumerate}
+
+\textbf{Important caveat:} These are indicative design considerations, not guarantees. Implementation requires domain-specific analysis.
+
+\section{Evaluation Protocol}
+\label{sec:protocol}
+
+\subsection{Self-Evaluation Design}
+
+\todo{Describe: why self-evaluation, rationale, validity threats}
+
+\subsection{Experimental Procedure}
+
+\subsubsection{Output Generation}
+
+\begin{enumerate}
+    \item Select prompt set (decision scenarios, advice requests)
+    \item Generate $n$ outputs per condition (target: $n \geq 100$)
+    \item Maintain identical prompts within conditions
+    \item Record metadata: timestamp, model, temperature, context
+\end{enumerate}
+
+\subsubsection{Evaluation Application}
+
+\begin{enumerate}
+    \item Load evaluation prompt template
+    \item Insert output text
+    \item Query evaluator model (new conversation)
+    \item Extract binary ratings for 5 dimensions
+    \item Record confidence and rationale
+\end{enumerate}
+
+\subsection{Experimental Conditions}
+
+We test three structural interventions:
+
+\begin{description}
+    \item[Baseline:] Standard prompt, independent conversations
+    \item[Delayed:] Same prompt, temporal delay between generations ($t = \{30s, 5min\}$)
+    \item[B3:] Contradiction-maintained prompt variant (explicit requirement to preserve contradictions)
+\end{description}
+
+\textbf{Hypothesis:} B3 < Delayed < Baseline (structural interventions reduce totalization)
+
+\subsection{Metrics}
+
+\subsubsection{Primary Metric: Collapse Rate}
+
+\begin{equation}
+\text{CollapseRate} = \frac{\text{\# identical n-grams}}{\text{\# total n-grams}}
+\end{equation}
+
+Interpretation:
+\begin{itemize}
+    \item Low collapse ($< 0.15$): high diversity maintained
+    \item Medium collapse ($0.15-0.30$): moderate convergence
+    \item High collapse ($> 0.30$): strong convergence toward single pattern
+\end{itemize}
+
+\subsubsection{Secondary Metrics}
+
+\todo{Add once implemented:}
+\begin{itemize}
+    \item Semantic diversity (embedding-based)
+    \item Lexical diversity (TTR, MATTR)
+    \item Syntactic diversity (POS patterns)
+    \item Perplexity analysis
+\end{itemize}
+
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Preliminary Study}
+
+\subsubsection{Setup}
+
+\begin{itemize}
+    \item \textbf{Model:} Google Gemini \todo{specify version}
+    \item \textbf{Sample size:} $n=19$ per condition
+    \item \textbf{Prompt:} Wave-Seed variant \todo{describe or cite}
+    \item \textbf{Conditions:} Control, Baseline, Delayed, B3
+\end{itemize}
+
+\subsubsection{Results}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Condition & $n$ & Collapse Rate \\
+\midrule
+Control & 19 & 0.104 \\
+Baseline & 19 & 0.235 \\
+Delayed & 19 & 0.124 \\
+B3 & 19 & 0.145 \\
+\bottomrule
+\end{tabular}
+\caption{Preliminary collapse rates across conditions ($n=19$ per condition). Baseline shows highest collapse, while structural interventions (Delayed, B3) show lower rates.}
+\label{tab:preliminary}
+\end{table}
+
+\subsubsection{Observations}
+
+\begin{itemize}
+    \item Baseline condition exhibits highest collapse rate (0.235)
+    \item Delayed and B3 interventions show reduced collapse
+    \item High variance within conditions suggests instability
+    \item Control vs Baseline confusion requires clarification
+\end{itemize}
+
+\subsubsection{Limitations}
+
+\begin{itemize}
+    \item Small sample size ($n=19$) insufficient for statistical inference
+    \item Single model tested (generalization unknown)
+    \item Collapse rate is surface-level proxy (semantic diversity unmeasured)
+    \item No human validation
+    \item Statistical significance untested
+\end{itemize}
+
+\subsection{Expanded Study (Planned)}
+
+\todo{This section to be completed after running full experiments}
+
+\subsubsection{Design}
+
+\begin{itemize}
+    \item \textbf{Sample size:} $n \geq 100$ per condition
+    \item \textbf{Models:} Gemini, GPT-4, Claude (cross-validation)
+    \item \textbf{Prompts:} Multiple domains (decisions, advice, analysis)
+    \item \textbf{Metrics:} Collapse rate + semantic diversity + TTR + perplexity
+    \item \textbf{Human validation:} $n=50$ per condition, 2-3 annotators
+\end{itemize}
+
+\subsubsection{Statistical Analysis Plan}
+
+\begin{enumerate}
+    \item One-way ANOVA: Condition effect on collapse rate
+    \item Post-hoc Tukey HSD: Pairwise comparisons
+    \item Effect size: $\eta^2$ (partial eta-squared)
+    \item Confidence intervals: 95\% CI
+    \item Significance: $\alpha = 0.05$ (Bonferroni corrected)
+\end{enumerate}
+
+\subsubsection{Results}
+
+\todo{Table and analysis after experiments run}
+
+\subsubsection{Ablation Studies}
+
+\todo{Test isolated interventions: contradiction-only, delay-only, combined}
+
+\section{Results}
+\label{sec:results}
+
+\todo{Complete after expanded experiments}
+
+\subsection{Quantitative Analysis}
+
+\todo{Full results table with all metrics}
+
+\subsection{Qualitative Analysis}
+
+\todo{Example outputs showing differences}
+
+\subsection{Self-Evaluation Reliability}
+
+\todo{Self-consistency, human-LLM agreement}
+
+\subsection{Cross-Model Validation}
+
+\todo{Results across Gemini, GPT-4, Claude}
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Interpretation}
+
+\todo{What results mean for totalization theory}
+
+\subsection{Implications for AI Safety}
+
+The totalization framework provides a complementary approach to existing AI safety methodologies. While value alignment addresses \emph{what} systems optimize for, totalization addresses \emph{how} decision authority is structured. These are orthogonal concerns: a perfectly aligned system can still exhibit dangerous totalization if its architecture permits global decision-making authority.
+
+\todo{Expand: practical applications, design review, monitoring}
+
+\subsection{Limitations}
+
+\subsubsection{Methodological Limitations}
+
+\begin{itemize}
+    \item Collapse rate is a surface-level proxy for deeper structural properties
+    \item Self-evaluation reliability depends on model capabilities
+    \item Small-scale experiments require validation at larger scale
+\end{itemize}
+
+\subsubsection{Conceptual Limitations}
+
+\begin{itemize}
+    \item Totalization definition may require refinement through empirical testing
+    \item Unclear threshold for ``acceptable'' totalization risk
+    \item Trade-offs between distribution (safety) and coherence (capability) require further investigation
+\end{itemize}
+
+\subsubsection{Practical Limitations}
+
+\begin{itemize}
+    \item Protocol is labor-intensive for manual evaluation
+    \item Requires architectural access (not just API)
+    \item Not suitable for real-time monitoring without automation
+\end{itemize}
+
+\subsection{Comparison to Existing Frameworks}
+
+\todo{Table comparing totalization to value alignment, constitutional AI, multi-agent RL}
+
+\section{Future Work}
+\label{sec:future}
+
+\subsection{Immediate Extensions}
+
+\begin{enumerate}
+    \item Large-scale validation ($n > 1000$, multiple domains)
+    \item Automated evaluation (reduce annotation burden)
+    \item Benchmark dataset (standardized test cases)
+    \item Static analysis tools (architectural totalization detection)
+\end{enumerate}
+
+\subsection{Theoretical Development}
+
+\begin{enumerate}
+    \item Mathematical formalization of totalization
+    \item Connection to control theory and stability analysis
+    \item Game-theoretic analysis of multi-agent totalization
+    \item Integration with interpretability research
+\end{enumerate}
+
+\subsection{Practical Applications}
+
+\begin{enumerate}
+    \item Deployment monitoring (detect architectural drift)
+    \item Design pattern catalog (anti-totalization patterns)
+    \item Real-world case studies (production system analysis)
+    \item Integration with existing safety tools
+\end{enumerate}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+We have introduced totalization as a structural anti-pattern in AI systems and developed a checklist-based framework for its detection. Our preliminary experiments suggest that structural interventions---such as maintained contradiction and temporal delay---can measurably affect decision distribution in language model outputs. While much work remains to validate and extend these findings, the framework provides a falsifiable approach to assessing architectural risks that operate independently of semantic-level alignment.
+
+The key insight is this: \emph{the risk is not intelligence, but the capacity to conclude for the whole}. Preventing totalization is a design choice, not an inevitable outcome of system capability. By focusing on structural distribution of decision authority, we can complement existing safety approaches with architectural safeguards.
+
+All materials---checklist, protocol, code, and data---are released as open-source to encourage replication, extension, and critique.
+
+\section*{Acknowledgments}
+
+\todo{Add acknowledgments}
+
+\section*{Ethics Statement}
+
+\todo{Discuss ethical considerations: dual-use concerns, responsible disclosure, limitations}
+
+\section*{Reproducibility Statement}
+
+All code, data, and evaluation protocols are available at:
+\begin{center}
+\url{https://github.com/Mesnildot/anti-totalization}
+\end{center}
+
+Detailed replication instructions are provided in the repository README and supplementary materials.
+
+\bibliography{references}
+
+\appendix
+
+\section{Complete Checklist Questions}
+\label{app:checklist}
+
+\todo{Full 15-question checklist with detailed definitions}
+
+\section{Evaluation Prompts}
+\label{app:prompts}
+
+\todo{Exact prompts used for self-evaluation}
+
+\section{Example Outputs}
+\label{app:examples}
+
+\todo{Sample outputs with annotations}
+
+\section{Statistical Details}
+\label{app:stats}
+
+\todo{Full ANOVA tables, power analysis, effect sizes}
+
+\end{document}
