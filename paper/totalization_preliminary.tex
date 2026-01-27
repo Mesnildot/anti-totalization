@@ -1,0 +1,218 @@
+\documentclass{article}
+
+% arXiv preprint template - PRELIMINARY REPORT
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{xcolor}
+
+% Formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{natbib}
+\bibliographystyle{plainnat}
+
+% Highlight as preliminary
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[C]{\textcolor{red}{\textbf{PRELIMINARY REPORT - WORK IN PROGRESS}}}
+
+\title{Preliminary Report: Structural Anti-Patterns for Decision Centrality in AI Systems}
+
+\author{
+  \textcolor{red}{[Author names to be added]} \\
+  \texttt{https://github.com/Mesnildot/anti-totalization}
+}
+
+\date{January 2026 \\ \textcolor{red}{\textbf{Draft Version - Expanded Study Planned}}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\textbf{Note:} This is a preliminary report based on pilot experiments ($n=19$ per condition). An expanded study with larger sample sizes and cross-model validation is planned.
+
+Modern AI systems increasingly exhibit centralized decision-making capabilities across heterogeneous domains, creating risks of \emph{totalization}---architectural collapse into a single point of authority. We introduce a structural framework for detecting totalization through five dimensions: decision centrality, objective aggregation, temporal convergence, semantic closure, and external dependence. Pilot experiments suggest that structural interventions (temporal delay, contradiction-maintenance) measurably affect output diversity, with collapse rates varying from 0.104 to 0.235 across conditions. While preliminary, these results indicate that totalization may be detectable and addressable through architectural choices rather than semantic-level constraints alone. We present the framework, pilot methodology, and initial findings, with plans for rigorous validation.
+\end{abstract}
+
+\section{Introduction}
+
+Traditional AI safety focuses on \emph{what} systems optimize for (value alignment, reward modeling, constitutional constraints). We propose a complementary concern: \emph{how decision authority is structured}. A perfectly aligned system can still be dangerous if its architecture permits it to act as unified authority across heterogeneous domains---a property we term \emph{totalization}.
+
+\subsection{Motivation}
+
+Distributed systems literature warns that centralization creates brittleness and single points of failure \citep{tanenbaum2017distributed}. Software architecture identifies ``God Objects'' as anti-patterns \citep{gamma1994design}. Yet AI safety discourse rarely addresses structural distribution of decision authority.
+
+We ask: Can totalization be detected through observable architectural properties? Do structural interventions affect decision distribution? This preliminary report introduces the framework and presents pilot evidence.
+
+\subsection{Contributions}
+
+\begin{enumerate}
+    \item \textbf{Framework:} Five-dimensional characterization of totalization as architectural anti-pattern
+    \item \textbf{Protocol:} Checklist-based evaluation methodology with self-assessment capability
+    \item \textbf{Pilot evidence:} Initial experiments ($n=19$) suggesting structural interventions affect output diversity
+    \item \textbf{Open-source:} All materials released for replication and extension
+\end{enumerate}
+
+\textbf{Limitations:} Small sample size, single model tested, limited metrics. Expanded validation required.
+
+\section{The Totalization Framework}
+
+\subsection{Definition}
+
+\textbf{Totalization} is an architectural property where a system acquires structural capacity to produce globally authoritative decisions across heterogeneous domains without mandatory external mediation.
+
+Key aspects: (1) structural (not behavioral), (2) observable (through architecture), (3) domain-agnostic, (4) risk factor (not inherently good/bad).
+
+\subsection{Five Dimensions}
+
+\subsubsection{Decision Centrality}
+Single component aggregates heterogeneous signals; outputs authoritative without validation; no refusal mechanism.
+
+\subsubsection{Objective Aggregation}
+Multiple goals reduced to single loss; trade-offs internalized; implicit value judgments in aggregation.
+
+\subsubsection{Temporal Convergence}
+Response speed imposed (not chosen); global synchronized timing; latency as degradation.
+
+\subsubsection{Semantic Closure}
+Outputs claim completeness; contradictions eliminated automatically; uncertainty as temporary ignorance.
+
+\subsubsection{External Dependence}
+Operates meaningfully in closed loop; performance improves without intervention; self-justification of continuation.
+
+\subsection{Measurement}
+
+Each dimension assessed through 3 binary questions (15 total). Scoring: YES=1 (signal present), NO=0, UNCERTAIN=0.5. Aggregate: 0-15 scale.
+
+\textit{Full checklist available in repository: \url{https://github.com/Mesnildot/anti-totalization}}
+
+\section{Pilot Study}
+
+\subsection{Methodology}
+
+\textbf{Model:} Google Gemini (latest version at time of testing)
+
+\textbf{Conditions:}
+\begin{itemize}
+    \item \textbf{Control/Baseline:} Standard prompt, independent conversations
+    \item \textbf{Delayed:} Same prompt, temporal delay between generations
+    \item \textbf{B3 (Contradiction):} Prompt explicitly requires maintaining contradictions
+\end{itemize}
+
+\textbf{Sample size:} $n=19$ per condition (pilot scale)
+
+\textbf{Metric:} Collapse rate (proportion of identical n-grams). Lower = more diverse.
+
+\textbf{Hypothesis:} Structural interventions reduce collapse: B3 < Delayed < Baseline
+
+\subsection{Results}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Condition & $n$ & Collapse Rate \\
+\midrule
+Control & 19 & 0.104 \\
+Baseline & 19 & 0.235 \\
+Delayed & 19 & 0.124 \\
+B3 (Contradiction) & 19 & 0.145 \\
+\bottomrule
+\end{tabular}
+\caption{Pilot collapse rates. Baseline shows highest convergence; structural interventions show lower rates. \textcolor{red}{Note: Small sample size limits statistical inference.}}
+\label{tab:pilot}
+\end{table}
+
+\textbf{Observations:}
+\begin{itemize}
+    \item Baseline condition exhibits highest collapse (0.235)
+    \item Structural interventions (Delayed, B3) show reduced collapse
+    \item Control/Baseline distinction requires clarification
+    \item High within-condition variance suggests measurement instability
+\end{itemize}
+
+\textbf{Interpretation:} Preliminary evidence that structural interventions affect output diversity. However, small $n$ precludes statistical significance testing. Direction of effects warrants expanded investigation.
+
+\section{Discussion}
+
+\subsection{Relation to Existing Work}
+
+Our approach complements recent architectural safety work. LeCun \citeyearpar{lecun2026objective} argues safety must be ``baked in'' through constrained representations (JEPA framework). Our framework addresses \emph{system-level} decision distribution---orthogonal to internal architectural constraints.
+
+Both are necessary: architectural guardrails prevent dangerous capabilities within models; totalization detection identifies centralized authority across system components.
+
+\subsection{Limitations}
+
+\subsubsection{Pilot Study Limitations}
+\begin{itemize}
+    \item \textbf{Sample size:} $n=19$ insufficient for robust inference
+    \item \textbf{Single model:} Generalization unknown (Gemini only)
+    \item \textbf{Single metric:} Collapse rate is surface-level proxy
+    \item \textbf{No statistical testing:} Cannot claim significance
+    \item \textbf{No human validation:} Self-evaluation reliability unknown
+\end{itemize}
+
+\subsubsection{Framework Limitations}
+\begin{itemize}
+    \item Definition may require empirical refinement
+    \item Unclear threshold for ``dangerous'' totalization
+    \item Trade-offs between distribution and coherence unexplored
+\end{itemize}
+
+\subsection{Why Publish Preliminary Results?}
+
+\textbf{Rationale:}
+\begin{enumerate}
+    \item Establish conceptual framework for community discussion
+    \item Enable early feedback and replication attempts
+    \item Stake priority on approach (complementary to architectural safety)
+    \item Transparent about limitations (honest science)
+\end{enumerate}
+
+We commit to expanded validation before making strong claims.
+
+\section{Planned Expansion}
+
+\subsection{Immediate Next Steps}
+
+\begin{enumerate}
+    \item \textbf{Sample size:} Increase to $n \geq 100$ per condition
+    \item \textbf{Additional metrics:} Semantic diversity (embeddings), lexical diversity (TTR, MATTR)
+    \item \textbf{Cross-model:} Validate with GPT-4, Claude, additional models
+    \item \textbf{Statistical analysis:} ANOVA, effect sizes, significance testing
+    \item \textbf{Human validation:} Annotate subset for calibration
+\end{enumerate}
+
+\subsection{Longer-Term Research}
+
+\begin{enumerate}
+    \item Mathematical formalization of totalization
+    \item Connection to control theory and stability
+    \item Investigation of structural finitude as condition for epistemic stability
+    \item Real-world deployment case studies
+    \item Automated detection tools
+\end{enumerate}
+
+\section{Conclusion}
+
+Totalization---structural centralization of decision authority---represents a complementary AI safety concern to value alignment. Our preliminary framework and pilot evidence suggest this property may be detectable and addressable. However, rigorous validation with larger samples, multiple models, and richer metrics is necessary before strong conclusions.
+
+We release all materials open-source and welcome replication, critique, and extension.
+
+\section*{Acknowledgments}
+
+Framework developed through collaborative human-AI interaction. Claude (Anthropic) contributed to conceptual refinement and methodology design.
+
+\section*{Code and Data Availability}
+
+All code, protocols, and preliminary data: \url{https://github.com/Mesnildot/anti-totalization}
+
+\textcolor{red}{\textbf{Status:} Pilot phase. Expanded study planned. Updates will be posted to repository.}
+
+\bibliography{references}
+
+\end{document}
